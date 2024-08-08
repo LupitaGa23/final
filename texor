@@ -12,16 +12,27 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
-# Mostrar el archivo con hexcurse
+# Mostrar el archivo con hexcurse en modo hexadecimal
 hexcurse "$1" &
 
-# Crear una interfaz de usuario sencilla con ncurses para manejar las opciones
+# PID del proceso hexcurse para poder cerrarlo más tarde
+HEXCURSE_PID=$!
+
+# Crear una interfaz de usuario sencilla para manejar las opciones
 while true; do
     echo "Presiona Ctrl + T para cambiar a modo binario."
+    echo "Presiona Ctrl + E para editar el archivo."
     read -rsn1 input
     if [ "$input" = $'\x14' ]; then  # Ctrl + T es \x14 en código ASCII
-        pkill hexcurse  # Cierra hexcurse
+        pkill -f hexcurse  # Cierra hexcurse
         echo "Cambiando a modo binario..."
         xxd -b "$1"  # Muestra el archivo en binario
+    elif [ "$input" = $'\x05' ]; then  # Ctrl + E es \x05 en código ASCII
+        pkill -f hexcurse  # Cierra hexcurse
+        echo "Abriendo editor hexadecimal..."
+        hexedit "$1"  # Abre el archivo en hexedit para edición
+        # Volver a mostrar el archivo con hexcurse después de la edición
+        hexcurse "$1" &
+        HEXCURSE_PID=$!
     fi
 done
