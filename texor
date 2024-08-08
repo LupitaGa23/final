@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Verificar que el archivo fue proporcionado
+if [ -z "$1" ]; then
+    echo "Uso: $0 <archivo>"
+    exit 1
+fi
+
+# Verificar que el archivo existe
+if [ ! -f "$1" ]; then
+    echo "El archivo '$1' no existe."
+    exit 1
+fi
+
+# Mostrar el archivo con hexcurse
+hexcurse "$1" &
+
+# Crear una interfaz de usuario sencilla con ncurses para manejar las opciones
+while true; do
+    echo "Presiona Ctrl + T para cambiar a modo binario."
+    read -rsn1 input
+    if [ "$input" = $'\x14' ]; then  # Ctrl + T es \x14 en código ASCII
+        # Aquí es donde cambiarías la vista o modo del archivo a binario
+        echo "Cambiando a modo binario..."
+        # Implementar la funcionalidad de cambio de modo aquí
+        # Podrías cerrar hexcurse y abrir otro programa que muestre el archivo en binario
+    fi
+done
