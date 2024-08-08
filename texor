@@ -20,9 +20,8 @@ while true; do
     echo "Presiona Ctrl + T para cambiar a modo binario."
     read -rsn1 input
     if [ "$input" = $'\x14' ]; then  # Ctrl + T es \x14 en código ASCII
-        # Aquí es donde cambiarías la vista o modo del archivo a binario
+        pkill hexcurse  # Cierra hexcurse
         echo "Cambiando a modo binario..."
-        # Implementar la funcionalidad de cambio de modo aquí
-        # Podrías cerrar hexcurse y abrir otro programa que muestre el archivo en binario
+        xxd -b "$1"  # Muestra el archivo en binario
     fi
 done
